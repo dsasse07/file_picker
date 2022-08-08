@@ -1,21 +1,42 @@
-
+# ENV Variable Config:
+# MNT_DIRECTORY = path to get from this app to /mnt in WSL
+# FILE_DIRECTORY = Path from /mnt to the files
+# RUN_DIRECTORY = Windows path from drive to file. Ex: C:\\Program Files\\Some Folder\\Example.txt
 
 class FilePicker
   include CliControls
 
-  attr_reader :directory, :files
+  attr_reader :mnt_path, :directory_path, :files_path, :run_path, :files
 
   def initialize
-    @directory = ENV["FILE_DIRECTORY"]
-    @files = Dir.entries(@directory).select { |f| File.file? File.join(@directory, f) }
+    get_file_paths()
+    load_files()
   end
 
   def run
-    welcome
-    main_menu
+    welcome()
+    main_menu()
   end
 
   private
+
+  def get_file_paths
+    @mnt_path=ENV["MNT_DIRECTORY"] # MNT_DIRECTORY is the directory of the /mnt path in WSL of the target drive
+    @directory_path = ENV["FILE_DIRECTORY"]
+    @run_path = ENV["RUN_DIRECTORY"]
+    @files_path = @mnt_path+@directory_path
+  end
+
+  def load_files
+    begin
+      @entries =  Dir.entries(@files_path)
+    rescue
+      system "sudo mount -t drvfs A: /mnt/a" 
+      @entries =  Dir.entries(@files_path)
+    ensure
+      @files = @entries.select{|f| File.file? File.join(@files_path, f)}
+    end
+  end
 
   def welcome
     puts "
@@ -33,42 +54,35 @@ class FilePicker
     choices = ["Open Random", "Select File", "Exit"]
     selection = @@prompt.select("What would you like to do?", choices)
     case selection
-    when "Open Random" 
-      open_random
-      main_menu
-    when "Select File"
-      select_file
-      main_menu
-    when "Exit"
-      system 'clear'
-      exit
+      when "Open Random" 
+        open_random()
+        main_menu()
+      when "Select File"
+        select_file()
+        main_menu()
+      when "Exit"
+        system 'clear'
+        exit
     end
   end
 
   def open_random
     random_index = rand(0...@files.length)
-    filename = @files[ random_index]
-    open( filename )
-  end
-
-  def open( filename )
-    path = ENV["RUN_DIRECTORY"] + filename
-    system `explorer.exe "#{path}"`
+    filename = @files[random_index]
+    open_file(filename)
   end
 
   def select_file
     filename = @@prompt.select("Select File", @files, filter: true)
-    open( filename )
+    open_file(filename)
   end
 
+  def open_file( filename )
+    system_path_for_file = @run_path + filename
+    system `explorer.exe "#{system_path_for_file}"`
+  end
 
-
-  
 end
-
-
-
-
 
 # binding.pry
 false
