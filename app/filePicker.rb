@@ -51,11 +51,14 @@ class FilePicker
   end
 
   def main_menu
-    choices = ["Open Random", "Select File", "Exit"]
+    choices = ["Open Random", "Pick Five", "Select File", "Exit"]
     selection = @@prompt.select("What would you like to do?", choices)
     case selection
       when "Open Random" 
         open_random()
+        main_menu()
+      when "Pick Five"
+        5.times { open_random() }
         main_menu()
       when "Select File"
         select_file()
