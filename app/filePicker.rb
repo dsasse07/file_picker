@@ -1,7 +1,14 @@
 # ENV Variable Config:
 # MNT_DIRECTORY = path to get from this app to /mnt in WSL
+# ex: ../../../../mnt/
 # FILE_DIRECTORY = Path from /mnt to the files
-# RUN_DIRECTORY = Windows path from drive to file. Ex: C:\\Program Files\\Some Folder\\Example.txt
+# ex: a/videos
+# RUN_DIRECTORY = #Windows path from drive to file's directory. 
+# Ex: C:\\Program Files\\Some Folder\\Example.txt
+
+# If using external drive and wsl, ensure there is a matching drive folder in /mtn/
+# sudo mkdir MNT_DIRECTORY + drive_letter
+#e ex: A:\\ -> ../../../../mnt/a
 
 class FilePicker
   include CliControls
