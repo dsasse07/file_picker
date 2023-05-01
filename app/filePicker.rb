@@ -1,7 +1,7 @@
 # ENV Variable Config:
 # MNT_DIRECTORY = path to get from this app to /mnt in WSL
 # ex: ../../../../mnt/
-# FILE_DIRECTORY = Path(s) from /mnt to the files
+# FILE_DIRECTORIES = comma-seperated list of Path(s) from /mnt to the files
 # ex: a/videos
 # RUN_DIRECTORY = #Windows path from drive to file's directory. 
 # Ex: C:\\Program Files\\Some Folder\\Example.txt
@@ -36,7 +36,7 @@ class FilePicker
 
   def get_file_paths
     @mnt_path=ENV["MNT_DIRECTORY"] # MNT_DIRECTORY is the directory of the /mnt path in WSL of the target drive
-    @directory_paths = ENV["FILE_DIRECTORY"]
+    @directory_paths = ENV["FILE_DIRECTORIES"]
     @run_path = ENV["RUN_DIRECTORY"]
     @files_paths = @directory_paths.split(",").map{|path| @mnt_path + path } 
   end
