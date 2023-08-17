@@ -23,7 +23,7 @@ class FilePicker
     if @files_paths.length > 1
       select_folder_menu()
     else
-      load_files(@files_path.first)
+      load_files(@files_paths.first)
     end
   end
 
