@@ -107,7 +107,6 @@ class FilePicker
   def open_file( filename )
     folder_segment = @selected_folder.empty? ? "" : "\\#{@selected_folder}\\"
     system_path_for_file = @run_path + "\\" + folder_segment + filename
-    binding.pry
     system `explorer.exe "#{system_path_for_file}"`
   end
 
