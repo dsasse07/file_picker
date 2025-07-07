@@ -45,7 +45,7 @@ class FilePicker
     begin
       @entries =  Dir.entries(file_path)
     rescue
-      system "sudo mount -t drvfs A: /mnt/a" 
+      # system "sudo mount -t drvfs A: /mnt/a" 
       @entries =  Dir.entries(file_path)
     ensure
       @files = @entries.select{|f| File.file? File.join(file_path, f)}
@@ -105,6 +105,7 @@ class FilePicker
   end
 
   def open_file( filename )
+    puts "Opening: #{filename}"
     folder_segment = @selected_folder.empty? ? "" : "\\#{@selected_folder}\\"
     system_path_for_file = @run_path + "\\" + folder_segment + filename
     system `explorer.exe "#{system_path_for_file}"`
